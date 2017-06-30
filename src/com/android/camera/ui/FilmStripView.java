@@ -1889,21 +1889,27 @@ public class FilmStripView extends ViewGroup implements BottomControlsListener {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        PhotoMenu pMenu = mPreviewGestures.getPhotoMenu();
-        if ((pMenu != null) &&
-            (pMenu.isMenuBeingAnimated() || pMenu.isPreviewMenuBeingAnimated()))
+        if (mPreviewGestures != null) {
+            PhotoMenu pMenu = mPreviewGestures.getPhotoMenu();
+            if ((pMenu != null) &&
+                (pMenu.isMenuBeingAnimated() || pMenu.isPreviewMenuBeingAnimated()))
                 return true;
 
-        VideoMenu vMenu = mPreviewGestures.getVideoMenu();
-        if ((vMenu != null) &&
-            (vMenu.isMenuBeingAnimated() || vMenu.isPreviewMenuBeingAnimated()))
+            VideoMenu vMenu = mPreviewGestures.getVideoMenu();
+            if ((vMenu != null) &&
+                (vMenu.isMenuBeingAnimated() || vMenu.isPreviewMenuBeingAnimated()))
                 return true;
-
+        }
         mGestureRecognizer.onTouchEvent(ev);
         return true;
     }
 
     public boolean checkSendToModeView(MotionEvent ev) {
+        if (mReset) {
+            mSendToPreviewMenu = false;
+            mSendToMenu = false;
+            mReset = false;
+        }
         if (mSendToPreviewMenu || mSendToMenu || mPreviewGestures == null)
             return true;
         PhotoMenu pMenu = mPreviewGestures.getPhotoMenu();
@@ -1946,11 +1952,6 @@ public class FilmStripView extends ViewGroup implements BottomControlsListener {
     public boolean sendToModeView(MotionEvent ev) {
         if (mPreviewGestures == null) {
             return false;
-        }
-        if (mReset) {
-            mSendToPreviewMenu = false;
-            mSendToMenu = false;
-            mReset = false;
         }
         if (mSendToPreviewMenu || mSendToMenu) {
             if (MotionEvent.ACTION_UP == ev.getActionMasked()

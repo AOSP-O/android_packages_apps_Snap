@@ -39,11 +39,6 @@
             style="@style/MenuButton" />
 
         <com.android.camera.ui.RotateImageView
-            android:id="@+id/hdr_switcher"
-            android:layout_weight="1"
-            style="@style/MenuButton" />
-
-        <com.android.camera.ui.RotateImageView
             android:id="@+id/ts_makeup_switcher"
             android:layout_weight="1"
             style="@style/MenuButton" />

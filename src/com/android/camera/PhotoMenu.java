@@ -93,7 +93,6 @@ public class PhotoMenu extends MenuController
     private static final int MODE_MAKEUP = 2;
     private static final int DEVELOPER_MENU_TOUCH_COUNT = 7;
     private int mSceneStatus;
-    private View mHdrSwitcher;
     private View mTsMakeupSwitcher;
     private View mFrontBackSwitcher;
     private View mSceneModeSwitcher;
@@ -125,7 +124,6 @@ public class PhotoMenu extends MenuController
         mSettingOn = activity.getString(R.string.setting_on_value);
         mActivity = activity;
         mFrontBackSwitcher = ui.getRootView().findViewById(R.id.front_back_switcher);
-        mHdrSwitcher = ui.getRootView().findViewById(R.id.hdr_switcher);
         mTsMakeupSwitcher = ui.getRootView().findViewById(R.id.ts_makeup_switcher);
         mSceneModeSwitcher = ui.getRootView().findViewById(R.id.scene_mode_switcher);
         mFilterModeSwitcher = ui.getRootView().findViewById(R.id.filter_mode_switcher);
@@ -159,14 +157,7 @@ public class PhotoMenu extends MenuController
         initSceneModeButton(mSceneModeSwitcher);
         initFilterModeButton(mFilterModeSwitcher);
         if (TsMakeupManager.HAS_TS_MAKEUP) {
-            if (initMakeupModeButton(mTsMakeupSwitcher)) {
-                mHdrSwitcher.setVisibility(View.INVISIBLE);
-            }
-        }
-
-        if(!TsMakeupManager.HAS_TS_MAKEUP) {
-            // HDR.
-            initSwitchItem(CameraSettings.KEY_CAMERA_HDR, mHdrSwitcher);
+            initMakeupModeButton(mTsMakeupSwitcher);
         }
 
         mOtherKeys1 = new String[] {
@@ -687,12 +678,6 @@ public class PhotoMenu extends MenuController
 
             popup1.setPreferenceEnabled(CameraSettings.KEY_ADVANCED_FEATURES, false);
             popup1.setPreferenceEnabled(CameraSettings.KEY_INSTANT_CAPTURE, false);
-
-            if(!TsMakeupManager.HAS_TS_MAKEUP) {
-                if (mHdrSwitcher.getVisibility() == View.VISIBLE) {
-                    buttonSetEnabled(mHdrSwitcher, true);
-                }
-            }
         } else {
             if ((advancedFeatures != null) && (advancedFeatures.equals(ubiFocusOn) ||
                     advancedFeatures.equals(chromaFlashOn) ||
@@ -710,22 +695,7 @@ public class PhotoMenu extends MenuController
                 popup1.setPreferenceEnabled(CameraSettings.KEY_SCENE_MODE, false);
                 popup1.setPreferenceEnabled(CameraSettings.KEY_INSTANT_CAPTURE, false);
                 setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
-                if(!TsMakeupManager.HAS_TS_MAKEUP) {
-                    if (mHdrSwitcher.getVisibility() == View.VISIBLE) {
-                        buttonSetEnabled(mHdrSwitcher, false);
-                    }
-                }
-            } else {
-                if(!TsMakeupManager.HAS_TS_MAKEUP) {
-                    if (mHdrSwitcher.getVisibility() == View.VISIBLE) {
-                        buttonSetEnabled(mHdrSwitcher, true);
-                    }
-                }
             }
-        }
-
-        if (mHdrSwitcher.getVisibility() == View.VISIBLE && autohdr != null) {
-            buttonSetEnabled(mHdrSwitcher, autohdr.equals("enable"));
         }
 
         if (mListener != null) {
@@ -1415,17 +1385,6 @@ public class PhotoMenu extends MenuController
                 pref_camera_advanced_feature_value_stillmore_on);
         if (same(pref, CameraSettings.KEY_ADVANCED_FEATURES, stillMoreOn)) {
            setPreference(CameraSettings.KEY_FLASH_MODE, Parameters.FLASH_MODE_OFF);
-        }
-
-        ListPreference autoHdrPref = mPreferenceGroup.findPreference(CameraSettings.KEY_AUTO_HDR);
-        if (autoHdrPref != null) {
-            if (autoHdrPref.getValue().equalsIgnoreCase("enable")) {
-                mHdrSwitcher.setVisibility(View.VISIBLE);
-                mHdrSwitcher.setEnabled(false);
-            } else {
-                mHdrSwitcher.setVisibility(View.VISIBLE);
-                mHdrSwitcher.setEnabled(true);
-            }
         }
 
         ListPreference hdrPref = mPreferenceGroup.findPreference(CameraSettings.KEY_CAMERA_HDR);

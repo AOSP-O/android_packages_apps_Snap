@@ -299,7 +299,6 @@ public class CameraControls extends RotatableLayout {
 
     public void disableSceneModes() {
         removeFromViewList(findViewById(R.id.scene_mode_switcher));
-        removeFromViewList(findViewById(R.id.hdr_switcher));
     }
 
     @Override
