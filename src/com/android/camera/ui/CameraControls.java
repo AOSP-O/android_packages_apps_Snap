@@ -79,6 +79,8 @@ public class CameraControls extends RotatableLayout {
     private View mReviewCancelButton;
     private View mReviewRetakeButton;
 
+    private View mTopBarCover;
+
     private final List<View> mViews = new ArrayList<>();
     private final List<View> mViewsDisabled = new ArrayList<>();
 
@@ -149,7 +151,7 @@ public class CameraControls extends RotatableLayout {
         synchronized (mViews) {
             if (!enable) {
                 for (View v : mViews) {
-                    if (v.getVisibility() != View.GONE && v.isEnabled()) {
+                    if (mTopBar.indexOfChild(v) < 0 && v.getVisibility() != View.GONE && v.isEnabled()) {
                         mViewsDisabled.add(v);
                         v.setEnabled(false);
                     }
@@ -170,6 +172,7 @@ public class CameraControls extends RotatableLayout {
         mVideoShutter.setClickable(enable);
         mTopBar.setEnabled(enable);
         mBottomBar.setEnabled(enable);
+        mTopBarCover.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     public void removeFromViewList(View view) {
@@ -203,6 +206,7 @@ public class CameraControls extends RotatableLayout {
         mHistogramView = (HistogramView) findViewById(R.id.histogram);
         mFrontBackSwitcher = findViewById(R.id.front_back_switcher);
         mMenu = findViewById(R.id.menu);
+        mTopBarCover = findViewById(R.id.top_bar_cover);
 
         if (!TsMakeupManager.HAS_TS_MAKEUP) {
             mTopBar.removeView(mTsMakeupSwitcher);

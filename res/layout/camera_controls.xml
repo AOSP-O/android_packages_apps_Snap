@@ -67,6 +67,18 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/top_bar_cover"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/preview_top_margin"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:layout_alignTop="@+id/top_bar"
+        android:alpha="0.4"
+        android:clickable="true"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
